@@ -1,0 +1,100 @@
+#ifndef SRC_NODE_NODEVISITOR_H_
+#define SRC_NODE_NODEVISITOR_H_
+
+#include <memory>
+
+#include "Term.h"
+#include "Literal.h"
+#include "PrimitiveTypeNode.h"
+#include "ArrayTypeNode.h"
+#include "VarDecl.h"
+#include "Top.h"
+#include "Method.h"
+#include "Parameter.h"
+#include "ArrayInitializer.h"
+#include "Block.h"
+#include "VarDeclStatement.h"
+#include "ExpressionStatement.h"
+#include "IfStatement.h"
+#include "WhileStatement.h"
+#include "BreakStatement.h"
+#include "ContinueStatement.h"
+#include "ReturnStatement.h"
+#include "BinaryExpression.h"
+#include "UnaryExpression.h"
+#include "CastExpression.h"
+#include "Identifier.h"
+#include "ArrayAccess.h"
+#include "MethodInvocation.h"
+#include "Assignment.h"
+#include "EmptyStatement.h"
+#include "XcreaseStatement.h"
+#include "ForStatement.h"
+
+using namespace std;
+
+namespace node {
+
+class NodeVisitor {
+public:
+	NodeVisitor();
+	virtual ~NodeVisitor();
+
+	virtual void visitLiteral(shared_ptr<Literal> node);
+
+	virtual void visitPrimitiveTypeNode(shared_ptr<PrimitiveTypeNode> node);
+
+	virtual void visitArrayTypeNode(shared_ptr<ArrayTypeNode> node);
+
+	virtual void visitTerm(shared_ptr<Term> node);
+
+	virtual void visitVarDecl(shared_ptr<VarDecl> node);
+
+	virtual void visitTop(shared_ptr<Top> node);
+
+	virtual void visitMethod(shared_ptr<Method> node);
+
+	virtual void visitParameter(shared_ptr<Parameter> node);
+
+	virtual void visitArrayInitializer(shared_ptr<ArrayInitializer> node);
+
+	virtual void visitBlock(shared_ptr<Block> node);
+
+	virtual void visitVarDeclStatement(shared_ptr<VarDeclStatement> node);
+
+	virtual void visitExpressionStatement(shared_ptr<ExpressionStatement> node);
+
+	virtual void visitIfStatement(shared_ptr<IfStatement> node);
+
+	virtual void visitWhileStatement(shared_ptr<WhileStatement> node);
+
+	virtual void visitBreakStatement(shared_ptr<BreakStatement> node);
+
+	virtual void visitContinueStatement(shared_ptr<ContinueStatement> node);
+
+	virtual void visitReturnStatement(shared_ptr<ReturnStatement> node);
+
+	virtual void visitBinaryExpression(shared_ptr<BinaryExpression> node);
+
+	virtual void visitUnaryExpression(shared_ptr<UnaryExpression> node);
+
+	virtual void visitCastExpression(shared_ptr<CastExpression> node);
+
+	virtual void visitIdentifier(shared_ptr<Identifier> node);
+
+	virtual void visitArrayAccess(shared_ptr<ArrayAccess> node);
+
+	virtual void visitMethodInvocation(shared_ptr<MethodInvocation> node);
+
+	virtual void visitAssignment(shared_ptr<Assignment> node);
+
+	virtual void visitEmptyStatement(shared_ptr<EmptyStatement> node);
+
+	virtual void visitXcreaseStatement(shared_ptr<XcreaseStatement> node);
+
+	virtual void visitForStatement(shared_ptr<ForStatement> node);
+};
+
+}
+
+#endif /* SRC_NODE_NODEVISITOR_H_ */

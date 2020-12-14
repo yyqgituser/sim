@@ -1,0 +1,16 @@
+int printf(string s, ...);
+
+int global = 5;
+
+void display() {
+    printf("%d\n", global);
+}
+  
+int main() {
+    printf("Before: ");
+    display();
+    global = 10;
+    printf("After: ");
+    display();
+    return 0;
+}

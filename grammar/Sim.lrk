@@ -1,0 +1,210 @@
+/*
+ * Grammar of Sim language。
+ */
+
+parser Sim(start = Start, look = 1, build_policy = only_lalr, optimize = off, debug = on) {
+Start = TopMemberList <declTop>;
+
+TopMemberList = ;
+TopMemberList = TopMemberList TopMemberDeclaration;
+
+TopMemberDeclaration = VariableDeclaration SEMI <declTopVar>;
+TopMemberDeclaration = MethodDeclaration;
+
+VariableDeclaration = Type IDENTIFIER <declVarWithoutInit>;
+VariableDeclaration = Type IDENTIFIER EQ VariableInitializer <declVarWithInit>;
+
+VariableInitializer = Expression;
+VariableInitializer = ArrayInitializer;
+
+MethodDeclaration = Type IDENTIFIER LPAREN OptionalFormalParameter RPAREN SEMI <declMethodWithoutBody>;
+MethodDeclaration = Type IDENTIFIER LPAREN OptionalFormalParameter RPAREN Block <declMethodWithBody>;
+
+OptionalFormalParameter = <declEmptyParams>;
+OptionalFormalParameter = ELLIPSIS <declVarParam> <declEmptyParams>;
+OptionalFormalParameter = FormalParameterList ;
+OptionalFormalParameter = FormalParameterList COMMA ELLIPSIS <declVarParam1>;
+
+FormalParameterList = FormalParameter <firstParam>;
+FormalParameterList = FormalParameterList COMMA FormalParameter <nextParam>;
+
+FormalParameter = Type IDENTIFIER <declParam>;
+
+ArrayInitializer = LBRACE RBRACE <declEmptyArrayInitializer>;
+ArrayInitializer = LBRACE VariableInitializerList RBRACE <declArrayInitializer>;
+
+VariableInitializerList = Expression <firstVariableInitializer>;
+VariableInitializerList = VariableInitializerList COMMA Expression <nextVariableInitializer>;
+
+Block = LBRACE RBRACE <declEmptyBlock>;
+Block = LBRACE BlockStatementList RBRACE <declBlock>;
+
+BlockStatementList = BlockStatement <firstBlockStatement>;
+BlockStatementList = BlockStatementList BlockStatement <nextBlockStatement>;
+
+BlockStatement = ExecutionStatement;
+BlockStatement = LocalVariableDeclarationStatement;
+
+LocalVariableDeclarationStatement = VariableDeclaration SEMI <declLocalVar>;
+
+ExecutionStatement = OpenStatement;
+ExecutionStatement = CloseStatement;
+
+OpenStatement = IfStatement;
+OpenStatement = IfElseOpenStatement;
+OpenStatement = WhileOpenStatement;
+OpenStatement = ForOpenStatement;
+
+CloseStatement = SimpleStatement;
+CloseStatement = IfElseCloseStatement;
+CloseStatement = WhileCloseStatement;
+CloseStatement = ForCloseStatement;
+
+SimpleStatement = Block;
+SimpleStatement = EmptyStatement;
+SimpleStatement = ExpressionStatement;
+SimpleStatement = BreakStatement;
+SimpleStatement = ContinueStatement;
+SimpleStatement = ReturnStatement;
+
+EmptyStatement = SEMI <declEmptyStatement>;
+
+ExpressionStatement = StatementExpression SEMI <declExpressionStatement>;
+
+StatementExpression = Assignment;
+StatementExpression = MethodInvocation;
+
+IfStatement = IF LPAREN Expression RPAREN ExecutionStatement <declIfStatement>;
+
+IfElseOpenStatement = IF LPAREN Expression RPAREN CloseStatement ELSE OpenStatement <declIfElseStatement>;
+
+IfElseCloseStatement = IF LPAREN Expression RPAREN CloseStatement ELSE CloseStatement <declIfElseStatement>;
+
+WhileOpenStatement = WHILE LPAREN Expression RPAREN OpenStatement <declWhileStatement>;
+
+WhileCloseStatement = WHILE LPAREN Expression RPAREN CloseStatement <declWhileStatement>;
+
+ForOpenStatement = FOR LPAREN OptionalForInit SEMI OptionalForCondition SEMI OptionalForUpdate RPAREN OpenStatement <declForStatement>;
+
+ForCloseStatement = FOR LPAREN OptionalForInit SEMI OptionalForCondition SEMI OptionalForUpdate RPAREN CloseStatement <declForStatement>;
+
+OptionalForInit = <declEmptyForInit>;
+OptionalForInit = ForInit;
+
+OptionalForCondition = <declEmptyForCondition>;
+OptionalForCondition = Expression;
+
+OptionalForUpdate = <declEmptyForUpdate>;
+OptionalForUpdate = StatementExpression;
+
+ForInit = StatementExpression;
+ForInit = VariableDeclaration;
+
+BreakStatement = BREAK SEMI <declBreakStatement>;
+
+ContinueStatement = CONTINUE SEMI <declContinueStatement>;
+
+ReturnStatement = RETURN SEMI <declReturnWithoutExpression>;
+ReturnStatement = RETURN Expression SEMI <declReturnWithExpression>;
+
+Expression = ConditionalOrExpression;
+
+ConditionalOrExpression = ConditionalAndExpression;
+ConditionalOrExpression = ConditionalOrExpression OROR ConditionalAndExpression <declBinaryExpr>;
+
+ConditionalAndExpression = EqualityExpression;
+ConditionalAndExpression = ConditionalAndExpression ANDAND EqualityExpression <declBinaryExpr>;
+
+EqualityExpression = RelationalExpression;
+EqualityExpression = EqualityExpression EQEQ RelationalExpression <declBinaryExpr>;
+EqualityExpression = EqualityExpression NOTEQ RelationalExpression <declBinaryExpr>;
+
+RelationalExpression = InclusiveOrExpression;
+RelationalExpression = RelationalExpression LT InclusiveOrExpression <declBinaryExpr>;
+RelationalExpression = RelationalExpression GT InclusiveOrExpression <declBinaryExpr>;
+RelationalExpression = RelationalExpression LTEQ InclusiveOrExpression <declBinaryExpr>;
+RelationalExpression = RelationalExpression GTEQ InclusiveOrExpression <declBinaryExpr>;
+
+InclusiveOrExpression = ExclusiveOrExpression;
+InclusiveOrExpression = InclusiveOrExpression OR ExclusiveOrExpression <declBinaryExpr>;
+
+ExclusiveOrExpression = AndExpression;
+ExclusiveOrExpression = ExclusiveOrExpression XOR AndExpression <declBinaryExpr>;
+
+AndExpression = ShiftExpression;
+AndExpression = AndExpression AND ShiftExpression <declBinaryExpr>;
+
+ShiftExpression = AdditiveExpression;
+ShiftExpression = ShiftExpression LSHIFT AdditiveExpression <declBinaryExpr>;
+ShiftExpression = ShiftExpression RSHIFT AdditiveExpression <declBinaryExpr>;
+
+AdditiveExpression = MultiplicativeExpression;
+AdditiveExpression = AdditiveExpression PLUS MultiplicativeExpression <declBinaryExpr>;
+AdditiveExpression = AdditiveExpression MINUS MultiplicativeExpression <declBinaryExpr>;
+
+MultiplicativeExpression = UnaryExpression;
+MultiplicativeExpression = MultiplicativeExpression MULT UnaryExpression <declBinaryExpr>;
+MultiplicativeExpression = MultiplicativeExpression DIV UnaryExpression <declBinaryExpr>;
+MultiplicativeExpression = MultiplicativeExpression MOD UnaryExpression <declBinaryExpr>;
+
+UnaryExpression = UnaryExpressionNotPlusMinus;
+UnaryExpression = PLUS UnaryExpression <declPrefixExpression>;
+UnaryExpression = MINUS UnaryExpression <declPrefixExpression>;
+
+UnaryExpressionNotPlusMinus = CastExpression;
+UnaryExpressionNotPlusMinus = COMP UnaryExpression <declPrefixExpression>;
+UnaryExpressionNotPlusMinus = NOT UnaryExpression <declPrefixExpression>;
+
+CastExpression = Primary;
+CastExpression = LPAREN Type RPAREN Primary <declCastExpression>;
+
+Primary = Literal;
+Primary = MethodInvocation;
+Primary = LeftHandSide;
+Primary = LPAREN Expression RPAREN <declParanExpression>;
+
+LeftHandSide = IDENTIFIER <declIdentifier>;
+LeftHandSide = ArrayAccess;
+
+ArrayAccess = Primary LBRACK Expression RBRACK <declArrayAccess>;
+
+MethodInvocation = IDENTIFIER LPAREN OptionalArgumentList RPAREN <declMethodInvocation>;
+
+OptionalArgumentList = <declEmptyArgumentList>;
+OptionalArgumentList = ArgumentList;
+		
+ArgumentList = Expression <firstArgument>;
+ArgumentList = ArgumentList COMMA Expression <nextArgument>;
+
+Assignment = LeftHandSide EQ Expression <declAssignment>;
+Assignment = XcreaseStatement;
+
+XcreaseStatement = LeftHandSide PLUSPLUS <declXcreaseStatement>;
+XcreaseStatement = LeftHandSide MINUSMINUS <declXcreaseStatement>;
+
+Literal = INT_LITERAL <declLiteral>;
+Literal = DOUBLE_LITERAL <declLiteral>;
+Literal = STRING_LITERAL <declLiteral>;
+Literal = TRUE <declLiteral>;
+Literal = FALSE <declLiteral>;
+
+Type = PrimitiveType;
+Type = PrimitiveType LBRACK RBRACK <declArrayType>;
+
+PrimitiveType = INT <declPrimitiveType>;
+PrimitiveType = DOUBLE <declPrimitiveType>;
+PrimitiveType = STRING <declPrimitiveType>;
+PrimitiveType = BOOLEAN <declPrimitiveType>;
+PrimitiveType = VOID <declPrimitiveType>;
+}
+
+generate {
+  c++ {
+    dest : "auto";
+    outencoding: "UTF-8";
+    name_space: "parser";
+    scanner_name_space: "lex";
+    test : on;
+	//debug : on;
+  }
+}

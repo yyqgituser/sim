@@ -1,0 +1,110 @@
+/**
+ * Lex of Sim。
+ */
+
+regexp LineTerminator = ["\r\n"] | "\r\n" ;
+regexp InputCharacter = ~["\r\n"] ;
+regexp WhiteSpace = LineTerminator | [' ', '\t', '\f'] ;
+
+regexp TraditionalComment = "/*" ~['*'] % "*/" | "/*" "*"+ "/" ;
+regexp EndOfLineComment = "//" InputCharacter* LineTerminator? ;
+regexp Comment = TraditionalComment |
+  EndOfLineComment;
+
+regexp Digit = ['0'-'9'];
+regexp HexDigit = ['0'-'9', 'a'-'f', 'A'-'F'];
+regexp E = ['e', 'E'];
+
+regexp Exponent =  E ['+','-']? Digit+;
+regexp Double = 
+        Digit+ '.' Digit* Exponent? |
+        '.' Digit+ Exponent? |
+        Digit+ Exponent;
+
+regexp IdentStart = ['a'-'z', 'A'-'Z', '_'];
+regexp IdentPart = IdentStart | Digit;
+regexp Identifier = IdentStart IdentPart*;
+
+regexp StringCharacter = ~["\r\n\"\\"];
+regexp SingleCharacter = ~["\r\n\'\\"];
+
+regexp Unicode4 = "\\u" HexDigit {4} ;
+regexp Unicode6 = "\\U" HexDigit {6} ;
+regexp EscapeChar = "\\b" | "\\t" | "\\n" | "\\f" |
+					"\\r" | "\\\"" | "\\'" | "\\\\" |
+					Unicode4 | Unicode6;
+regexp String = '"' (SingleCharacter | EscapeChar)* '"';
+
+scanner Sim() {
+  Digit+ : return INT_LITERAL;  
+  Double : return DOUBLE_LITERAL;
+  
+  "return" : return RETURN;   
+  "continue" : return CONTINUE;  
+  "true" : return TRUE;  
+  "false" : return FALSE;  
+  "break" : return BREAK; 
+  "if" : return IF;   
+  "else" : return ELSE;   
+  "while" : return WHILE;  
+  "for" : return FOR;  
+  "int" : return INT;  
+  "void" : return VOID;
+  "double" : return DOUBLE; 
+  "boolean" : return BOOLEAN; 
+  "string" : return STRING;
+  
+  '+' : return PLUS;
+  '-' : return MINUS;  
+  '*' : return MULT;  
+  '/' : return DIV;   
+  '%' : return MOD;
+  '!' : return NOT;  
+  "~" : return COMP; 
+  '(' : return LPAREN;  
+  ')' : return RPAREN;  
+  ';' : return SEMI;  
+  '[' : return LBRACK; 
+  ']' : return RBRACK; 
+  '{' : return LBRACE;  
+  '}' : return RBRACE; 
+  ',' : return COMMA;  
+  '=' : return EQ;  
+  ">" : return GT;
+  "<" : return LT;
+  '|' : return OR;
+  '^' : return XOR;
+  '&' : return AND;
+  
+  "==" : return EQEQ;
+  "!=" : return NOTEQ;
+  "<=" : return LTEQ;
+  ">=" : return GTEQ;
+  "<<" : return LSHIFT;
+  ">>" : return RSHIFT;
+  "&&" : return ANDAND;
+  "||" : return OROR;
+  "++" : return PLUSPLUS;
+  "--" : return MINUSMINUS;  
+  
+  "..." : return ELLIPSIS;
+  
+  String : return STRING_LITERAL;  
+  Identifier : return IDENTIFIER; // must be last
+  
+  (WhiteSpace | Comment) + : skip;
+
+  @eoi : return EOI;
+}
+
+generate {
+  c++ {
+    ttm: tree;
+    dest : "auto";
+    optimize: bit7;
+    outencoding: "UTF-8";
+    name_space: "lex";
+    external_token_type : "parser" "SimTokenType";
+    test : on;
+  }
+}

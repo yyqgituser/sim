@@ -1,0 +1,10 @@
+int putchar(int c);
+
+int main() {
+	int[] a = {72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33};
+	
+	for (int i = 0; i < 12; i++) {
+		putchar(a[i]);
+	}
+	return 0;
+}

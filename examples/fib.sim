@@ -1,0 +1,29 @@
+int getchar();
+int putchar(int c);
+
+int printf(string s, ...);
+
+int readInt() {
+	int c = getchar();
+	int v = 0;
+	while (c >= 48 && c <= 57) {
+		v = v * 10 + c - 48;
+		c = getchar();
+	}
+	return v;
+}
+int fib(int n) {
+    if (n <= 2) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+int main() {
+    int n = readInt();
+    int i = 1;
+    for (int i = 1; i <= n; i++) {
+        printf("%d: %d\n", i, fib(i));
+    }
+    return 0;
+}

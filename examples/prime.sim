@@ -1,0 +1,31 @@
+int getchar();
+
+int printf(string s, ...);
+
+int readInt() {
+	int c = getchar();
+	int v = 0;
+	while (c >= 48 && c <= 57) {
+		v = v * 10 + c - 48;
+		c = getchar();
+	}
+	return v;
+}
+
+int main() {
+	int n = readInt();
+	for (int i = 2; i <= n; i++) {
+		boolean isp = true;
+		for (int j = 2; j < i; j++) {
+			if (i % j == 0) {
+				isp = false;
+				break;
+			}
+		}
+		if (isp) {
+			printf("%d\n", i);
+		}
+	}
+	return 0;
+}
+
