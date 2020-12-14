@@ -116,7 +116,7 @@ bool checkSubDir(std::string dir, std::string subDir) {
 
 	string path = dir + "/" + subDir;
 	if (!stat(path.c_str(), &st)) {
-		if ((st.st_mode & _S_IFDIR) != 0) {
+		if ((st.st_mode & S_IFDIR) != 0) {
 			return true;
 		}
 	}
