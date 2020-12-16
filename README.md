@@ -18,4 +18,38 @@ Sim is intended as a demostration of programming lanugage design, though it has 
  
  If you want to build Sim for windows, you need install [MinGW](http://www.mingw.org/) and other tools.
  
+### Code examples
+```
+// proto type declarations for calling c function
+int getchar();
+int putchar(int c);
+int printf(string s, ...);
+
+int readInt() {
+	int c = getchar();
+	int v = 0;
+	while (c >= 48 && c <= 57) {
+		v = v * 10 + c - 48;
+		c = getchar();
+	}
+	return v;
+}
+
+int fib(int n) {
+    if (n <= 2) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+int main() {
+    int n = readInt();
+    for (int i = 1; i <= n; i++) {
+        printf("%d: %d\n", i, fib(i));
+    }
+    return 0;
+}
+```
+More example can be found in [examples](https://github.com/yyqgituser/sim/tree/main/examples)
+
 
