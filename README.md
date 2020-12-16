@@ -19,7 +19,7 @@ Sim is intended as a demostration of programming lanugage design, though it has 
 3. Run examples, simc only compile sim source to object file, you need a linker to generate excutable file(here we use gcc as a linker)
  #cd examples  
  #simc hello.sim  
- #gcc hello.o -o hello
+ #gcc hello.o -o hello  
  #./hello
  
  Except the .o file, simc also generate file hello.ll which includes IR code.
