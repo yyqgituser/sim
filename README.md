@@ -1,6 +1,11 @@
 # Sim: A Simple language based on LLVM
 Sim is intended as a demostration of programming lanugage design, though it has something more than [Kaleidoscope](https://llvm.org/docs/tutorial/index.html). [Visitor design pattern](https://en.wikipedia.org/wiki/Visitor_pattern) makes it more extensiable. 
 
+## Table of Content
+- [Build for Linux](#build-for-linux)
+- [Code example](#code-example)
+- [Features](#features)
+
 ### Build for Linux
 1. Build and install [LLVM](https://llvm.org/docs/CMake.html), make sure [LLVM library for cmake](https://llvm.org/docs/CMake.html#id15) are properly installed.
 2. Download source  
@@ -19,7 +24,7 @@ Sim is intended as a demostration of programming lanugage design, though it has 
  
  If you want to build Sim for windows, you need install [MinGW](http://www.mingw.org/) and other tools.
  
-### Code examples
+### Code example
 ```
 // proto type declarations for calling c function
 int getchar();
