@@ -12,6 +12,7 @@ int readInt() {
 }
 
 int main() {
+	printf("Input a number:");
 	int n = readInt();
 	for (int i = 2; i <= n; i++) {
 		boolean isp = true;
