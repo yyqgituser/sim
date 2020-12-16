@@ -89,3 +89,5 @@ llvm_map_components_to_libnames(llvm_libs support core irreader target x86asmpar
 
 target_link_libraries(simc cstreamio ${llvm_libs})
 
+install(TARGETS simc DESTINATION bin)
+
