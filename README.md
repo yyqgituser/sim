@@ -61,7 +61,7 @@ int main() {
 More examples can be found in [examples](https://github.com/yyqgituser/sim/tree/main/examples)
 
 ### Features
-1. Static type check
+1. Static type check  
   Supported type: int double, string, boolean, void. int is a 32 bits signed integer and double is 64 bits. string is a zero-ended 8 bits array.
   
 2. Grammar, refer to [grammar and lex files](https://github.com/yyqgituser/sim/tree/main/grammar)
@@ -73,7 +73,7 @@ More examples can be found in [examples](https://github.com/yyqgituser/sim/tree/
    int: 123
    double: 1.23 1e10
    boolean: true false  
-   string: "a string"  
+   string: "a string\n"  
    array: {1, 2, 3}
 
 5. Expression
