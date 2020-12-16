@@ -77,23 +77,14 @@ void Attribute::visitVarDecl(shared_ptr<VarDecl> node) {
 	if (node->typeNode->type->kind == ERROR_TYPE) {
 		return;
 	}
-	u32string name = node->name->token->text;
-	if (local->lookupLocal(name)) {
-		cout << node->name->token->line << " line, " << node->name->token->column
-				<< " column, error: variable '" << toUtf8(name) << "' redefined" << endl;
-		result = 1;
-		return;
-	}
-	local->add(name, node->typeNode->type);
-	if (node->init) {
-		node->init->accept(this);
-		if (node->init->type && node->init->type->kind == ERROR_TYPE) {
+	varDeclNode = node;
+	for (auto &decl : *node->decls) {
+		decl->accept(this);
+		if (result != 0) {
 			return;
 		}
-		if (!node->init->type) { // empty array
-			node->init->type = node->typeNode->type;
-		}
 	}
+	varDeclNode = 0;
 }
 
 void Attribute::visitTop(shared_ptr<Top> node) {
@@ -502,5 +493,25 @@ void Attribute::visitForStatement(shared_ptr<ForStatement> node) {
 		node->body->accept(this);
 	}
 	local = outScope;
+}
+
+void Attribute::visitDeclarator(shared_ptr<Declarator> node) {
+	u32string name = node->name->token->text;
+	if (local->lookupLocal(name)) {
+		cout << node->name->token->line << " line, " << node->name->token->column
+				<< " column, error: variable '" << toUtf8(name) << "' redefined" << endl;
+		result = 1;
+		return;
+	}
+	local->add(name, varDeclNode->typeNode->type);
+	if (node->init) {
+		node->init->accept(this);
+		if (node->init->type && node->init->type->kind == ERROR_TYPE) {
+			return;
+		}
+		if (!node->init->type) { // empty array
+			node->init->type = varDeclNode->typeNode->type;
+		}
+	}
 }
 

@@ -61,47 +61,14 @@ void Gen::visitTerm(shared_ptr<Term> node) {
 }
 
 void Gen::visitVarDecl(shared_ptr<VarDecl> node) {
-	u32string name32 = node->name->token->text;
-	string name = toUtf8(name32);
-	shared_ptr<type::Type> ltype = node->typeNode->type;
-	shared_ptr<VarSymbol> var = make_shared<VarSymbol>(name32, ltype);
-	if (isLocal) {
-		local->add(name32, var);
-		var->value = createAlloca(ltype->getRawType(context), name);
-		if (node->init) {
-			node->init->accept(this);
-			shared_ptr<type::Type> rtype = node->init->type;
-			if (ltype->equals(rtype)) {
-				value = builder->CreateStore(value, var->value);
-			} else { // only left double, right int
-				Value *doubleValue = builder->CreateSIToFP(value, ltype->getRawType(context));
-				value = builder->CreateStore(doubleValue, var->value);
-			}
-		}
-	} else {
-		global->add(name32, var);
-		module->getOrInsertGlobal(name, ltype->getRawType(context));
-		GlobalVariable *gv = module->getNamedGlobal(name);
-		gv->setLinkage(GlobalValue::CommonLinkage);
-		gv->setInitializer(ltype->getDefaultValue(context));
-		var->value = gv;
-		if (node->init) {
-			if (ltype->kind == ARRAY_TYPE) {
-				Location loc = node->init->getLocation();
-				cout << loc.line << " line, " << loc.column
-						<< " column, error: don't support global array initialization yet" << endl;
-				result = 1;
-			}
-			node->init->accept(this);
-			shared_ptr<type::Type> rtype = node->init->type;
-			if (ltype->equals(rtype)) {
-				value = builder->CreateStore(value, var->value);
-			} else { // only left double, right int
-				Value *doubleValue = builder->CreateSIToFP(value, ltype->getRawType(context));
-				value = builder->CreateStore(doubleValue, var->value);
-			}
+	varDeclNode = node;
+	for (auto &decl : *node->decls) {
+		decl->accept(this);
+		if (result != 0) {
+			return;
 		}
 	}
+	varDeclNode = 0;
 }
 
 void Gen::visitTop(shared_ptr<Top> node) {
@@ -711,6 +678,50 @@ void Gen::visitForStatement(shared_ptr<ForStatement> node) {
 		breaked = oldBreaked;
 	}
 	local = outScope;
+}
+
+void Gen::visitDeclarator(shared_ptr<Declarator> node) {
+	u32string name32 = node->name->token->text;
+	string name = toUtf8(name32);
+	shared_ptr<type::Type> ltype = varDeclNode->typeNode->type;
+	shared_ptr<VarSymbol> var = make_shared<VarSymbol>(name32, ltype);
+	if (isLocal) {
+		local->add(name32, var);
+		var->value = createAlloca(ltype->getRawType(context), name);
+		if (node->init) {
+			node->init->accept(this);
+			shared_ptr<type::Type> rtype = node->init->type;
+			if (ltype->equals(rtype)) {
+				value = builder->CreateStore(value, var->value);
+			} else { // only left double, right int
+				Value *doubleValue = builder->CreateSIToFP(value, ltype->getRawType(context));
+				value = builder->CreateStore(doubleValue, var->value);
+			}
+		}
+	} else {
+		global->add(name32, var);
+		module->getOrInsertGlobal(name, ltype->getRawType(context));
+		GlobalVariable *gv = module->getNamedGlobal(name);
+		gv->setLinkage(GlobalValue::CommonLinkage);
+		gv->setInitializer(ltype->getDefaultValue(context));
+		var->value = gv;
+		if (node->init) {
+			if (ltype->kind == ARRAY_TYPE) {
+				Location loc = node->init->getLocation();
+				cout << loc.line << " line, " << loc.column
+						<< " column, error: don't support global array initialization yet" << endl;
+				result = 1;
+			}
+			node->init->accept(this);
+			shared_ptr<type::Type> rtype = node->init->type;
+			if (ltype->equals(rtype)) {
+				value = builder->CreateStore(value, var->value);
+			} else { // only left double, right int
+				Value *doubleValue = builder->CreateSIToFP(value, ltype->getRawType(context));
+				value = builder->CreateStore(doubleValue, var->value);
+			}
+		}
+	}
 }
 
 // TODO: remove createAlloca by a two pass visit

@@ -73,10 +73,14 @@ public:
 
 	virtual void visitForStatement(shared_ptr<ForStatement> node);
 
+	virtual void visitDeclarator(shared_ptr<Declarator> node);
+
 private:
 	shared_ptr<Type> returnType;
 
 	shared_ptr<Scope<Type>> local;
+
+	shared_ptr<VarDecl> varDeclNode;
 
 	shared_ptr<vector<shared_ptr<Type>>> paramTypes;
 

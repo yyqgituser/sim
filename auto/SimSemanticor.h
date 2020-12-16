@@ -16,6 +16,12 @@ public:
 
   virtual bool declTopVar() = 0;
 
+  virtual bool declVarDecl() = 0;
+
+  virtual bool declFirstDeclarator() = 0;
+
+  virtual bool declNextDeclarator() = 0;
+
   virtual bool declVarWithoutInit() = 0;
 
   virtual bool declVarWithInit() = 0;

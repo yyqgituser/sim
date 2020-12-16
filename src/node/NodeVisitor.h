@@ -30,6 +30,7 @@
 #include "EmptyStatement.h"
 #include "XcreaseStatement.h"
 #include "ForStatement.h"
+#include "Declarator.h"
 
 using namespace std;
 
@@ -93,6 +94,8 @@ public:
 	virtual void visitXcreaseStatement(shared_ptr<XcreaseStatement> node);
 
 	virtual void visitForStatement(shared_ptr<ForStatement> node);
+
+	virtual void visitDeclarator(shared_ptr<Declarator> node);
 };
 
 }

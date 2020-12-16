@@ -38,14 +38,14 @@ void Checker::printAssignError(Location loc, shared_ptr<Type> left, shared_ptr<T
 }
 
 void Checker::visitVarDecl(shared_ptr<VarDecl> node) {
-	if (node->init) {
-		if (!isAssignable(node->typeNode->type, node->init->type)) {
-			printAssignError(node->getLocation(), node->typeNode->type, node->init->type);
-			result = 1;
+	varDeclNode = node;
+	for (auto &decl : *node->decls) {
+		decl->accept(this);
+		if (result != 0) {
 			return;
 		}
-		node->init->accept(this);
 	}
+	varDeclNode = 0;
 }
 
 void Checker::visitTop(shared_ptr<Top> node) {
@@ -266,6 +266,17 @@ void Checker::visitForStatement(shared_ptr<ForStatement> node) {
 		if (result != 0) {
 			return;
 		}
+	}
+}
+
+void Checker::visitDeclarator(shared_ptr<Declarator> node) {
+	if (node->init) {
+		if (!isAssignable(varDeclNode->typeNode->type, node->init->type)) {
+			printAssignError(node->getLocation(), varDeclNode->typeNode->type, node->init->type);
+			result = 1;
+			return;
+		}
+		node->init->accept(this);
 	}
 }
 

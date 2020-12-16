@@ -24,6 +24,21 @@ public:
     return true;
   }
 
+  bool declVarDecl() {
+    //std::cout << "declVarDecl" << std::endl;
+    return true;
+  }
+
+  bool declFirstDeclarator() {
+    //std::cout << "declFirstDeclarator" << std::endl;
+    return true;
+  }
+
+  bool declNextDeclarator() {
+    //std::cout << "declNextDeclarator" << std::endl;
+    return true;
+  }
+
   bool declVarWithoutInit() {
     //std::cout << "declVarWithoutInit" << std::endl;
     return true;

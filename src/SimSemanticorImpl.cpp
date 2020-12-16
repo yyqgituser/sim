@@ -35,6 +35,7 @@
 #include "EmptyStatement.h"
 #include "XcreaseStatement.h"
 #include "ForStatement.h"
+#include "Declarator.h"
 
 using namespace util;
 
@@ -114,8 +115,29 @@ bool SimSemanticorImpl::declTopVar() {
 	return true;
 }
 
+bool SimSemanticorImpl::declVarDecl() {
+	shared_ptr<vector<shared_ptr<Node>>> decls = popList();
+	shared_ptr<Node> typeNode = popNode();
+	shared_ptr<Node> varDecl = make_shared<VarDecl>(typeNode, decls);
+	pushNode(move(varDecl));
+	return true;
+}
+
+bool SimSemanticorImpl::declFirstDeclarator() {
+	shared_ptr<vector<shared_ptr<Node>>> decls = make_shared<vector<shared_ptr<Node>>>();
+	decls->push_back(popNode());
+	pushList(move(decls));
+	return true;
+}
+
+bool SimSemanticorImpl::declNextDeclarator() {
+	pop();
+	lists.top()->push_back(popNode());
+	return true;
+}
+
 bool SimSemanticorImpl::declVarWithoutInit() {
-	pushNode(shared_ptr<Node>(new VarDecl(popNode(), pop(), 0)));
+	pushNode(shared_ptr<Node>(new Declarator(pop(), 0)));
 	return true;
 }
 
@@ -123,8 +145,7 @@ bool SimSemanticorImpl::declVarWithInit() {
 	shared_ptr<Node> init = popNode();
 	pop();
 	shared_ptr<Term> name = pop();
-	shared_ptr<Node> type = popNode();
-	pushNode(shared_ptr<Node>(new VarDecl(type, name, init)));
+	pushNode(shared_ptr<Node>(new Declarator(name, init)));
 	return true;
 }
 

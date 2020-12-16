@@ -2,6 +2,7 @@
 #define SRC_NODE_VARDECL_H_
 
 #include <memory>
+#include <vector>
 
 #include "Node.h"
 #include "Term.h"
@@ -14,11 +15,9 @@ class VarDecl: public Node, public enable_shared_from_this<VarDecl> {
 public:
 	shared_ptr<Node> typeNode;
 
-	shared_ptr<Term> name;
+	shared_ptr<vector<shared_ptr<Node>>> decls;
 
-	shared_ptr<Node> init;
-
-	VarDecl(shared_ptr<Node> typeNode, shared_ptr<Term> name, shared_ptr<Node> init);
+	VarDecl(shared_ptr<Node> typeNode, shared_ptr<vector<shared_ptr<Node>>> decls);
 	virtual ~VarDecl();
 
 	virtual void accept(NodeVisitor *visitor);

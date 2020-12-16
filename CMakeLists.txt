@@ -62,6 +62,7 @@ add_executable(simc auto/SimScannerData.cpp
 					src/node/EmptyStatement.cpp
 					src/node/XcreaseStatement.cpp
 					src/node/ForStatement.cpp
+					src/node/Declarator.cpp
 					src/type/Type.cpp
 					src/type/StringType.cpp
 					src/type/IntType.cpp

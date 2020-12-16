@@ -89,5 +89,8 @@ void NodeVisitor::visitXcreaseStatement(shared_ptr<XcreaseStatement> node) {
 void NodeVisitor::visitForStatement(shared_ptr<ForStatement> node) {
 }
 
+void NodeVisitor::visitDeclarator(shared_ptr<Declarator> node) {
+}
+
 }
 

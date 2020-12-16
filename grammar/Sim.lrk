@@ -2,7 +2,7 @@
  * Grammar of Sim language。
  */
 
-parser Sim(start = Start, look = 1, build_policy = only_lalr, optimize = off, debug = on) {
+parser Sim(start = Start, look = 1, build_policy = only_lalr, optimize = off, debug = off) {
 Start = TopMemberList <declTop>;
 
 TopMemberList = ;
@@ -11,8 +11,13 @@ TopMemberList = TopMemberList TopMemberDeclaration;
 TopMemberDeclaration = VariableDeclaration SEMI <declTopVar>;
 TopMemberDeclaration = MethodDeclaration;
 
-VariableDeclaration = Type IDENTIFIER <declVarWithoutInit>;
-VariableDeclaration = Type IDENTIFIER EQ VariableInitializer <declVarWithInit>;
+VariableDeclaration = Type VariableDeclaratorList <declVarDecl>;
+
+VariableDeclaratorList = VariableDeclarator <declFirstDeclarator>;
+VariableDeclaratorList = VariableDeclaratorList COMMA VariableDeclarator <declNextDeclarator>;
+
+VariableDeclarator = IDENTIFIER <declVarWithoutInit>;
+VariableDeclarator = IDENTIFIER EQ VariableInitializer <declVarWithInit>;
 
 VariableInitializer = Expression;
 VariableInitializer = ArrayInitializer;

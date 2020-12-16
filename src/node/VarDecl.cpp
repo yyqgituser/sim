@@ -4,8 +4,8 @@
 
 namespace node {
 
-VarDecl::VarDecl(shared_ptr<Node> typeNode, shared_ptr<Term> name, shared_ptr<Node> init) :
-		typeNode(typeNode), name(name), init(init) {
+VarDecl::VarDecl(shared_ptr<Node> typeNode, shared_ptr<vector<shared_ptr<Node>>> decls) :
+		typeNode(typeNode), decls(decls) {
 }
 
 VarDecl::~VarDecl() {
@@ -16,7 +16,7 @@ void VarDecl::accept(NodeVisitor *visitor) {
 }
 
 Location VarDecl::getLocation() {
-	return name->getLocation();
+	return typeNode->getLocation();
 }
 
 } /* namespace node */

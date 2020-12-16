@@ -101,6 +101,8 @@ public:
 
 	virtual void visitForStatement(shared_ptr<ForStatement> node);
 
+	virtual void visitDeclarator(shared_ptr<Declarator> node);
+
 private:
 	shared_ptr<LLVMContext> context;
 
@@ -113,6 +115,8 @@ private:
 	shared_ptr<Scope<sym::Symbol>> global;
 
 	shared_ptr<Scope<sym::Symbol>> local;
+
+	shared_ptr<VarDecl> varDeclNode;
 
 	shared_ptr<vector<shared_ptr<type::Type>>> paramTypes;
 
