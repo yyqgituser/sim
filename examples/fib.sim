@@ -2,6 +2,7 @@
 int getchar();
 int putchar(int c);
 int printf(string s, ...);
+
 int readInt() {
 	int c = getchar();
 	int v = 0;
