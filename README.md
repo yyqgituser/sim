@@ -1,5 +1,5 @@
 # Sim: A Simple language based on LLVM
-Sim is intended as a demostration of programming lanugage design, though it has something more than [Kaleidoscope](https://llvm.org/docs/tutorial/index.html). Visitor design pattern make it more extensiable. 
+Sim is intended as a demostration of programming lanugage design, though it has something more than [Kaleidoscope](https://llvm.org/docs/tutorial/index.html). [Visitor design pattern](https://en.wikipedia.org/wiki/Visitor_pattern) makes it more extensiable. 
 
 ### Build for Linux
 1. Build and install [LLVM](https://llvm.org/docs/CMake.html), make sure [LLVM library for cmake](https://llvm.org/docs/CMake.html#id15) are properly installed.
