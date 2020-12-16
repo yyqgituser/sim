@@ -1,8 +1,7 @@
+// proto type declarations for calling c function
 int getchar();
 int putchar(int c);
-
 int printf(string s, ...);
-
 int readInt() {
 	int c = getchar();
 	int v = 0;
@@ -12,6 +11,7 @@ int readInt() {
 	}
 	return v;
 }
+
 int fib(int n) {
     if (n <= 2) {
         return 1;
