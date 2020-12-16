@@ -1,3 +1,4 @@
+// proto type declaration for calling c function
 int putchar(int c);
 
 int main() {
