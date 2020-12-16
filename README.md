@@ -26,7 +26,7 @@ Sim is intended as a demostration of programming lanugage design, though it has 
  
 ### Code example
 ```
-// proto type declarations for calling c function
+// proto type declarations for calling C function
 int getchar();
 int putchar(int c);
 int printf(string s, ...);
