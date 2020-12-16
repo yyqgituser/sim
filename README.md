@@ -92,13 +92,13 @@ Sim don't have runtime heap, except global variables, all variables are allocate
 9. Dead code detection  
 Sim compiler will report error if it detected some unreachable code.
 ```
-	int a;
-	if(n == 1) {
-		return 1;
-	} else {
-		return 2;
-	}
-	a = 1; // error
+int a;
+if(n == 1) {
+	return 1;
+} else {
+	return 2;
+}
+a = 1; // error
 ```
 
 
