@@ -81,10 +81,10 @@ Support common C-like operators: || && == != < > <= >= | & << >> + - * / % ^ ! (
 Don't support shortcut evaluation of logic expression.  
 Don't support '?' expression
 Don't support '++' and '--' as operators, but support them as statement. for example:
-'''
+```
 a = b++; // illegal
 i++; // legal
-'''
+```
 Type cast are only supported between numbers, in this case, only int <-> double convertion.
 
 6. Sub function
