@@ -79,7 +79,7 @@ More examples can be found in [examples](https://github.com/yyqgituser/sim/tree/
 5. Expression
 Support common C-like operators: || && == != < > <= >= | & << >> + - * / % ^ ! ()  
 Don't support shortcut evaluation of logic expression.  
-Don't support '?' expression
+Don't support '?' expression  
 Don't support '++' and '--' as operators, but support them as statement. for example:
 ```
 a = b++; // illegal
