@@ -16,6 +16,6 @@ Sim is intended as a demostration of programming lanugage design, though it has 
  #gcc hello.o  
  Except the .o file, simc also generate file hello.ll which include the IR code.
  
- If you want to build Sim for windows, you need install [MinGW](http://www.mingw.org/) and tools.
+ If you want to build Sim for windows, you need install [MinGW](http://www.mingw.org/) and other tools.
  
 
