@@ -12,6 +12,7 @@ Sim is intended as a demostration of programming lanugage design, though it has 
  #git clone https://github.com/yyqgituser/sim.git  
  #cd sim  
  #mkdir build  
+ #cd build  
  #cmake ..  
  #make  
  #sudo make install
