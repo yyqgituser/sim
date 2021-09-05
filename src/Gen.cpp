@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+
+#include "llvm/Support/CodeGen.h"
+
 #include "SimTokenType.h"
 #include "misc.h"
 #include "MethodSymbol.h"
@@ -111,7 +114,7 @@ void Gen::visitTop(shared_ptr<Top> node) {
 	llFile.close();
 
 	TargetOptions opt;
-	auto rm = Optional<Reloc::Model>();
+	auto rm = Optional<Reloc::Model>(Reloc::PIC_);
 	auto targetMachine = target->createTargetMachine(targetTriple, "generic", "", opt, rm);
 	module->setDataLayout(targetMachine->createDataLayout());
 	raw_fd_ostream objFile(filename.substr(0, filename.length() - 4) + ".o", ec, sys::fs::OF_None);
