@@ -63,7 +63,8 @@ More examples can be found in [examples](https://github.com/yyqgituser/sim/tree/
 
 ### Features
 1. Static type check  
-  Supported type: int double, string, boolean, void. int is a 32 bits signed integer and double is 64 bits. string is a zero-ended 8 bits array.
+  Type: int, double, string, boolean, void. 
+  int is a 32 bits signed integer and double is 64 bits. string is a zero-ended 8 bits array.
   
 2. Grammar, refer to [grammar and lex files](https://github.com/yyqgituser/sim/tree/main/grammar)
 
